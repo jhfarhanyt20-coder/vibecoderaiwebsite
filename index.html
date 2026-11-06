@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCoder AI — Your AI Coding Assistant</title>
+    <meta name="description" content="VibeCoder AI — a powerful AI-powered coding assistant for Windows. Download free and start building.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        :root {
+            --bg: #07070d;
+            --surface: #0f0f1a;
+            --surface-2: #16162a;
+            --border: #1f1f38;
+            --text: #eceaf6;
+            --muted: #9d9ab8;
+            --primary: #7c3aed;
+            --primary-2: #06b6d4;
+            --accent: #c4b5fd;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        ::selection { background: rgba(124, 58, 237, 0.45); }
+        a { color: inherit; }
+        .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== Ambient background ===== */
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(600px circle at 15% -5%, rgba(124, 58, 237, 0.16), transparent 60%),
+                radial-gradient(700px circle at 85% 10%, rgba(6, 182, 212, 0.12), transparent 60%),
+                var(--bg);
+        }
+
+        /* ===== Navbar ===== */
+        nav {
+            padding: 18px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(31, 31, 56, 0.6);
+            position: sticky;
+            top: 0;
+            background: rgba(7, 7, 13, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 100;
+        }
+        .logo {
+            font-size: 21px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .logo i { font-size: 20px; -webkit-text-fill-color: initial; color: #a78bfa; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 14.5px; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: #fff; }
+        .nav-github {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text) !important;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .nav-github:hover { border-color: var(--primary); background: var(--surface-2); }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        /* ===== Hero ===== */
+        .hero { text-align: center; padding: 110px 0 90px; position: relative; }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 420px;
+            background: radial-gradient(ellipse, rgba(124, 58, 237, 0.28), transparent 65%);
+            z-index: -1;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(124, 58, 237, 0.45);
+            color: var(--accent);
+            padding: 7px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+        .badge i { font-size: 11px; }
+        h1 {
+            font-size: 76px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 20%, #a5b4fc 60%, #67e8f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -2.5px;
+            line-height: 1.05;
+        }
+        .tagline {
+            font-size: 21px;
+            color: var(--muted);
+            max-width: 620px;
+            margin: 0 auto 46px;
+        }
+        .cta-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5 55%, #0891b2);
+            color: #fff;
+            padding: 17px 44px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 700;
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .download-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 50px rgba(124, 58, 237, 0.65); }
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 17px 36px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        }
+        .secondary-btn:hover { border-color: var(--primary); background: rgba(124, 58, 237, 0.08); transform: translateY(-2px); }
+        .version-text { margin-top: 26px; color: #7d7b99; font-size: 14px; font-weight: 500; }
+        .hero-note { margin-top: 10px; color: #66627f; font-size: 13px; }
+
+        /* ===== Stats ===== */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            padding: 40px 0;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number { font-size: 40px; font-weight: 900; background: linear-gradient(135deg, #a78bfa, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { color: var(--muted); font-size: 14px; font-weight: 500; }
+
+        /* ===== Features ===== */
+        .features { padding: 90px 0; }
+        .features h2, .install h2, .faq h2, .cta h2 { text-align: center; font-size: 40px; font-weight: 900; letter-spacing: -1px; }
+        .features-sub, .cta p { text-align: center; color: var(--muted); margin: 14px auto 56px; max-width: 560px; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; }
+        .feature-card {
+            background: linear-gradient(180deg, var(--surface), rgba(15, 15, 26, 0.5));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 34px 28px;
+            transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+        }
+        .feature-card:hover { border-color: rgba(124, 58, 237, 0.6); transform: translateY(-6px); box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45); }
+        .feature-icon {
+            width: 62px; height: 62px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(6, 182, 212, 0.18));
+            border: 1px solid rgba(124, 58, 237, 0.35);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px;
+            color: #a78bfa;
+            margin-bottom: 22px;
+        }
+        .feature-card h3 { font-size: 19px; margin-bottom: 10px; color: #fff; font-weight: 700; }
+        .feature-card p { color: var(--muted); font-size: 14.5px; }
+
+        /* ===== Install Steps ===== */
+        .install { padding: 90px 0; background: linear-gradient(180deg, transparent, rgba(124, 58, 237, 0.05) 50%, transparent); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .install h2 { margin-bottom: 56px; }
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; counter-reset: step; }
+        .step { text-align: center; padding: 12px; }
+        .step-number {
+            width: 60px; height: 60px;
+            background: linear-gradient(135deg, #7c3aed, #0891b2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; font-weight: 800; color: #fff;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+        }
+        .step h3 { font-size: 18px; margin-bottom: 8px; color: #fff; }
+        .step p { color: var(--muted); font-size: 14.5px; }
+
+        /* ===== CTA ===== */
+        .cta { text-align: center; padding: 110px 0; }
+        .cta h2 { font-size: 46px; }
+        .cta p { font-size: 18px; }
+
+        /* ===== Footer ===== */
+        footer { text-align: center; padding: 50px 0; border-top: 1px solid var(--border); color: #7d7b99; font-size: 14px; }
+        footer a { color: var(--primary); text-decoration: none; }
+        footer a:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 52px; letter-spacing: -1.5px; }
+            .tagline { font-size: 18px; }
+            .features h2, .install h2, .faq h2, .cta h2 { font-size: 32px; }
+            .cta h2 { font-size: 36px; }
+            .stats { gap: 36px; }
+            .stat-number { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <nav class="container">
+        <a href="#" class="logo"><i class="fas fa-rocket"></i> VibeCoder AI</a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#install">Install</a>
+            <a href="#faq">FAQ</a>
+            <a class="nav-github" href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero container">
+        <div class="badge"><i class="fas fa-bolt"></i> v0.3.4 — Now with Agentic Coding</div>
+        <h1>VibeCoder AI</h1>
+        <p class="tagline">The AI coding assistant that builds, fixes, and ships code while you vibe.</p>
+        <div class="cta-row">
+            <a class="download-btn" href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI/releases/download/v0.3.4/VibeCoderAI-v2-0.3.4.exe">
+                <i class="fas fa-download"></i> Download for Windows
+            </a>
+            <a class="secondary-btn" href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
+        </div>
+        <div class="version-text">Version 0.3.4 · Free &amp; Open Source</div>
+        <div class="hero-note">Windows 10/11 · Auto-updater included · Native performance</div>
+    </section>
+
+    <!-- Stats -->
+    <section class="container">
+        <div class="stats">
+            <div class="stat"><div class="stat-number">4</div><div class="stat-label">Latest Release</div></div>
+            <div class="stat"><div class="stat-number">0.3.4</div><div class="stat-label">Current Version</div></div>
+            <div class="stat"><div class="stat-number">115MB</div><div class="stat-label">Windows Installer</div></div>
+            <div class="stat"><div class="stat-number">∞</div><div class="stat-label">Free Updates</div></div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Why VibeCoder AI?</h2>
+            <p class="features-sub">Built for developers who ship fast</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Agentic Coding</h3>
+                    <p>Autonomous agents that plan, edit, and ship code while you vibe.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Smart Context</h3>
+                    <p>Understands your codebase deeply and writes context-aware solutions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Auto Update</h3>
+                    <p>Native auto-updater keeps you on the latest version automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Privacy First</h3>
+                    <p>Your code stays yours. Secure by design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Install Steps -->
+    <section class="install" id="install">
+        <div class="container">
+            <h2>Get Started in Minutes</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Download</h3>
+                    <p>Grab the latest Windows installer from GitHub Releases.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Install</h3>
+                    <p>Run the installer and follow the setup wizard.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Launch &amp; Build</h3>
+                    <p>Open VibeCoder AI and start shipping your next project.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="features" id="faq" style="padding: 90px 0;">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+                <div class="feature-card" style="cursor: default;">
+                    <h3 style="font-size: 17px; margin-bottom: 8px; color: #fff;">Is VibeCoder AI free?</h3>
+                    <p>Yes — it's completely free and open source under the MIT license.</p>
+                </div>
+                <div class="feature-card" style="cursor: default;">
+                    <h3 style="font-size: 17px; margin-bottom: 8px; color: #fff;">Which platforms are supported?</h3>
+                    <p>Currently Windows 10/11 is fully supported, with macOS and Linux builds in progress.</p>
+                </div>
+                <div class="feature-card" style="cursor: default;">
+                    <h3 style="font-size: 17px; margin-bottom: 8px; color: #fff;">Does it work offline?</h3>
+                    <p>The core assistant works with local models; cloud features require an internet connection.</p>
+                </div>
+                <div class="feature-card" style="cursor: default;">
+                    <h3 style="font-size: 17px; margin-bottom: 8px; color: #fff;">How does auto-update work?</h3>
+                    <p>Native auto-updater delivers updates silently in the background while you code.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to vibe?</h2>
+            <p>Join thousands of developers building with VibeCoder AI.</p>
+            <a class="download-btn" href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI/releases/download/v0.3.4/VibeCoderAI-v2-0.3.4.exe">
+                <i class="fas fa-download"></i> Download VibeCoder AI v0.3.4
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container">
+        <p>© 2026 VibeCoder AI · <a href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI" target="_blank">Source Code</a> · <a href="https://github.com/jhfarhanyt20-coder/VibeCoder-AI/releases" target="_blank">Releases</a></p>
+    </footer>
+</body>
+</html>
